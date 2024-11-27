@@ -23,7 +23,6 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
       "https://quantum-assignment-8roq.vercel.app/",
     ],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
