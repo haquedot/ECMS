@@ -22,9 +22,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: [
-      "https://quantum-assignment-8roq.vercel.app/",
-    ],
+    origin: "*",
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     preflightContinue: false,
     optionsSuccessStatus: 204,
