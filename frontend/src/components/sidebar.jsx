@@ -6,6 +6,7 @@ import { FaBell } from "react-icons/fa6";
 import { BsBarChart } from "react-icons/bs";
 import { CiLogout } from "react-icons/ci";
 import sidebarSupportImg from "../assets/images/sidebar-support-img.svg";
+import { FaUsers } from "react-icons/fa6";
 import toast from "react-hot-toast";
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Sidebar = () => {
             } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer hover:border`}
             onClick={()=>navigate('/dashboard/users')}
           >
-            <FaBell
+            <FaUsers
               className={` ${
                 location.pathname === "/dashboard/users" ||
                 location.pathname === "/dashboard/users/"
