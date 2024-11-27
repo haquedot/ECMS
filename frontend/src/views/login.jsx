@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineEnvelope } from "react-icons/hi2";
 import { CiLock } from "react-icons/ci";
 import { FiEye } from "react-icons/fi";
@@ -27,6 +27,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         localStorage.setItem("user-token", response?.data?.data?.token);
+        localStorage.setItem("username", response?.data?.data?.User?.username);
         toast.success("Login Successfully!");
         navigate("/dashboard");
         setLoader(false);
@@ -34,9 +35,15 @@ const Login = () => {
     } catch (error) {
       setLoader(false);
       console.log("error in login:", error);
-      toast.error(error?.response?.message || "Failed to login");
+      toast.error(error?.response?.data?.data?.message || error?.response?.data?.message || "Failed to login");
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("user-token")) {
+      navigate("/dashboard");
+    }
+  }, []);
   return (
     <div className="w-full md:h-[100vh] overflow-x-hidden bg-[#FEF6EF] flex md:flex-row flex-col-reverse justify-center items-center">
       <div className="md:w-5/12 w-full flex flex-col justify-center items-center md:py-0 py-8">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineEnvelope } from "react-icons/hi2";
 import { CiLock } from "react-icons/ci";
 import { FiEye } from "react-icons/fi";
@@ -39,9 +39,15 @@ const Signup = () => {
     } catch (error) {
       setLoader(false);
       console.log("error in login:", error);
-      toast.error(error?.response?.message || "Failed to login");
+      toast.error(error?.response?.data?.data?.message || error?.response?.data?.message || "Failed to login");
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("user-token")) {
+      navigate("/dashboard");
+    }
+  }, []);
   return (
     <div className="w-full md:h-[100vh] overflow-x-hidden bg-[#FEF6EF] flex md:flex-row-reverse flex-col-reverse justify-center items-center">
       <div className="md:w-5/12 w-full flex flex-col justify-center items-center md:py-0 py-8">
@@ -167,7 +173,7 @@ const Signup = () => {
       </div>
       <div className="md:w-5/12 w-full flex md:flex-row flex-col justify-center items-center">
         <h1 className="relative z-[3] text-3xl font-bold text-[#92613A] md:hidden block text-center mt-4">
-          Welcome Back!!
+          Signup!!
         </h1>
         <img
           src={SignupImg}
