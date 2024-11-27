@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./views/login";
 import Signup from "./views/signup";
 import { Toaster } from "react-hot-toast";
-import DashboardLayout from "./views/dashboard/dashboardlayout";
+import DashboardLayout from "./views/dashboard/dashboardLayout";
 
 const App = () => {
   const navigate = useNavigate();
