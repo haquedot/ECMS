@@ -15,10 +15,10 @@ const DashboardLayout = () => {
   }, []);
   return (
     <div className="flex gap-[10px] bg-[#FEF6EF]">
-      <div className="w-2/12 bg-white">
+      <div className="md:w-2/12 md:bg-white">
         <Sidebar />
       </div>
-      <div className="w-10/12 ">
+      <div className="md:w-10/12 w-full ">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/users" element={<UserList />} />

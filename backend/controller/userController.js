@@ -47,8 +47,8 @@ const Login = async (req, res) => {
 };
 const Register = async (req, res) => {
   try {
-    const { email, password, username,dob } = req.body;
-    if (!email || !password || !username || !dob) {
+    const { email, password, username } = req.body;
+    if (!email || !password || !username) {
       return res.status(httpStatusCode.BAD_REQUEST).json({
         success: false,
         message: "email or password or username is empty",
@@ -66,7 +66,7 @@ const Register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      dob:dob
+      role:'admin'
     });
     if (!User) {
       return res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({
