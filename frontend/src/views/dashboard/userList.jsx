@@ -79,8 +79,8 @@ const UserList = () => {
       sortable: true,
     },
     {
-      name: "DOB",
-      selector: (row) => row?.dob || "24-02-2004",
+      name: "Report",
+      selector: (row) => row?.dob || "report",
       cell: (row) => (
         <p className="text-base font-medium">{row?.dob || "24-02-2004"}</p>
       ),

@@ -3,6 +3,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Dashboard from "./dashboard";
 import UserList from "./userList";
 import Sidebar from "../../components/sidebar";
+import Notifications from "./notifications";
+import Settings from "./settings";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ const DashboardLayout = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/users" element={<UserList />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </div>

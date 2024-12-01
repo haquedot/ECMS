@@ -2,8 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { MdSpaceDashboard } from "react-icons/md";
-import { FaBell } from "react-icons/fa6";
-import { BsBarChart } from "react-icons/bs";
+import { FaBell, FaGear } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import sidebarSupportImg from "../assets/images/sidebar-support-img.svg";
 import { FaUsers } from "react-icons/fa6";
@@ -11,7 +10,7 @@ import toast from "react-hot-toast";
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const handleLogout=()=>{
+  const handleLogout = () => {
     localStorage.clear();
     toast.success("Logout Successfully!")
     navigate('/login')
@@ -19,67 +18,111 @@ const Sidebar = () => {
   return (
     <div className="w-full flex flex-col justify-between px-3 shadow-xl h-[100vh]">
       <div className="w-full">
-        <div className="w-full flex gap-[10px] items-center justify-center my-3">
-          <img src={logo} alt="" className="h-[90px] w-[full]" />
+        <div className="w-full flex gap-[10px] items-center px-2 my-3">
+          <img src={logo} alt="" className="h-[50px]" />
         </div>
         <div className="w-full flex flex-col mt-4">
           <div
-            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
-              location.pathname === "/dashboard" ||
+            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${location.pathname === "/dashboard" ||
               location.pathname === "/dashboard/"
-                ? "bg-[#FCE2CE] shadow-lg"
-                : "bg-white"
-            } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
+              ? "bg-[#FCE2CE] shadow-lg"
+              : "bg-white"
+              } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
             onClick={() => navigate("/dashboard")}
           >
             <MdSpaceDashboard
-              className={` ${
-                location.pathname === "/dashboard" ||
+              className={` ${location.pathname === "/dashboard" ||
                 location.pathname === "/dashboard/"
-                  ? "text-[#92613A]"
-                  : "text-[#616161]"
-              }  group-hover:text-[#92613A] text-lg`}
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                }  group-hover:text-[#92613A] text-lg`}
             />
             <p
-              className={` ${
-                location.pathname === "/dashboard" ||
+              className={` ${location.pathname === "/dashboard" ||
                 location.pathname === "/dashboard/"
-                  ? "text-[#92613A]"
-                  : "text-[#616161]"
-              } group-hover:text-[#92613A] text-base`}
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                } group-hover:text-[#92613A] text-base`}
             >
               Dashboard
             </p>
           </div>
           <div
-            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${
-              location.pathname === "/dashboard/users" ||
+            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${location.pathname === "/dashboard/users" ||
               location.pathname === "/dashboard/users/"
-                ? "bg-[#FCE2CE] shadow-lg"
-                : "bg-white"
-            } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer hover:border`}
-            onClick={()=>navigate('/dashboard/users')}
+              ? "bg-[#FCE2CE] shadow-lg"
+              : "bg-white"
+              } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer hover:border`}
+            onClick={() => navigate('/dashboard/users')}
           >
             <FaUsers
-              className={` ${
-                location.pathname === "/dashboard/users" ||
+              className={` ${location.pathname === "/dashboard/users" ||
                 location.pathname === "/dashboard/users/"
-                  ? "text-[#92613A]"
-                  : "text-[#616161]"
-              }  group-hover:text-[#92613A] text-lg`}
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                }  group-hover:text-[#92613A] text-lg`}
             />
             <p
-              className={` ${
-                location.pathname === "/dashboard/users" ||
+              className={` ${location.pathname === "/dashboard/users" ||
                 location.pathname === "/dashboard/users/"
-                  ? "text-[#92613A]"
-                  : "text-[#616161]"
-              } group-hover:text-[#92613A] text-base`}
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                } group-hover:text-[#92613A] text-base`}
             >
               Employees
             </p>
           </div>
-          <div className="flex gap-[10px] items-center my-4 px-2 cursor-pointer" onClick={()=>handleLogout()}>
+          <div
+            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${location.pathname === "/dashboard/notifications" ||
+              location.pathname === "/dashboard/notifications/"
+              ? "bg-[#FCE2CE] shadow-lg"
+              : "bg-white"
+              } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
+            onClick={() => navigate("/dashboard/notifications")}
+          >
+            <FaBell
+              className={` ${location.pathname === "/dashboard/notifications" ||
+                location.pathname === "/dashboard/notifications/"
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                }  group-hover:text-[#92613A] text-lg`}
+            />
+            <p
+              className={` ${location.pathname === "/dashboard/notifications" ||
+                location.pathname === "/dashboard/notifications/"
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                } group-hover:text-[#92613A] text-base`}
+            >
+              Notifications
+            </p>
+          </div>
+          <div
+            className={`group flex my-2 gap-[10px] items-center px-4 py-3 ${location.pathname === "/dashboard/settings" ||
+              location.pathname === "/dashboard/settings/"
+              ? "bg-[#FCE2CE] shadow-lg"
+              : "bg-white"
+              } hover:bg-primary hover:text-white hover:shadow-xl rounded-lg cursor-pointer`}
+            onClick={() => navigate("/dashboard/settings")}
+          >
+            <FaGear
+              className={` ${location.pathname === "/dashboard/settings" ||
+                location.pathname === "/dashboard/settings/"
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                }  group-hover:text-[#92613A] text-lg`}
+            />
+            <p
+              className={` ${location.pathname === "/dashboard/settings" ||
+                location.pathname === "/dashboard/settings/"
+                ? "text-[#92613A]"
+                : "text-[#616161]"
+                } group-hover:text-[#92613A] text-base`}
+            >
+              Settings
+            </p>
+          </div>
+          <div className="flex gap-[10px] items-center my-4 px-2 cursor-pointer" onClick={() => handleLogout()}>
             <CiLogout className="text-xl text-red-400" />
             <p className="text-base text-red-400">Logout</p>
           </div>
