@@ -76,7 +76,7 @@ const Sidebar = () => {
                   : "text-[#616161]"
               } group-hover:text-[#92613A] text-base`}
             >
-              User List
+              Employees
             </p>
           </div>
           <div className="flex gap-[10px] items-center my-4 px-2 cursor-pointer" onClick={()=>handleLogout()}>
