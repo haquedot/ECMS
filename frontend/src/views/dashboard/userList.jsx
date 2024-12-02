@@ -17,6 +17,8 @@ import {
 } from "@material-tailwind/react";
 import { Calendar } from "../../components/ui/calendar";
 import { SyncLoader } from "react-spinners";
+import DocumentView from "../../components/documentView";
+import { FaRegFilePdf } from "react-icons/fa";
 // Custom styles for the DataTable
 const customStyles = {
   tableWrapper: {
@@ -91,7 +93,13 @@ const UserList = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [currentEditUser, setCurrentEditUser] = useState("");
   const [isDateOpen, setIsDateOpen] = useState(false);
+  const [isUserPdfModalOpen, setIsUserPdfModalOpen] = useState(false);
 
+  const handleUserPdfModal = () => setIsUserPdfModalOpen(!isUserPdfModalOpen);
+  const handleOpenDocument = (user) => {
+    handleUserPdfModal();
+    setSelectedUser(user);
+  };
   const handleOpen = () => setOpen(!open);
   const columns = [
     {
@@ -155,6 +163,10 @@ const UserList = () => {
         //   <BsThreeDotsVertical className="text-xl text-[#969DA6]" />
         // </button>
         <div className="flex gap-[10px] items-center">
+          <FaRegFilePdf
+            className="text-xl text-[#a32810] hover:text-[#10A37F] cursor-pointer"
+            onClick={() => handleOpenDocument(row)}
+          />
           <FaRegEye
             className="text-xl text-[#10A37F] hover:text-[#10A37F] cursor-pointer"
             onClick={() => handleViewUser(row)}
@@ -692,6 +704,29 @@ const UserList = () => {
           ) : (
             <p className="text-gray-600">No user selected</p>
           )}
+        </DialogBody>
+        <DialogFooter className="flex justify-end">
+          <Button
+            color="red"
+            onClick={handleViewUser}
+            className="bg-red-500 text-white hover:bg-red-600"
+          >
+            Close
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog
+        open={isUserPdfModalOpen}
+        handler={handleUserPdfModal}
+        className="max-h-[90vh] overflow-scroll bg-white rounded-lg shadow-xl p-4 md:p-6"
+        style={{ scrollbarWidth: "none" }}
+      >
+        <DialogHeader className="text-2xl font-semibold text-gray-900">
+          User Experience Certificate
+        </DialogHeader>
+        <DialogBody>
+          <DocumentView user={selectedUser}/>
         </DialogBody>
         <DialogFooter className="flex justify-end">
           <Button
