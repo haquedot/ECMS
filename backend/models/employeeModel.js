@@ -14,6 +14,10 @@ const EmployeesSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    joiningDate: {
+      type: String,
+      required: true,
+    },
     designation: {
       type: String,
       required: true,
@@ -46,15 +50,15 @@ const EmployeesSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    pinCode:{
-        type:Number,
-        required:false
+    pinCode: {
+      type: Number,
+      required: false,
     },
-    status:{
-        type:Boolean,
-        required:false,
-        default:true,
-    }
+    status: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   { timestamps: true }
 );

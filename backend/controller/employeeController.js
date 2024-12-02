@@ -64,6 +64,7 @@ const AddEmployee = async (req, res) => {
       name,
       email,
       phoneNumber,
+      joiningDate,
       designation,
       contractLength,
       category,
@@ -73,12 +74,14 @@ const AddEmployee = async (req, res) => {
       city,
       state,
       pinCode,
+
     } = req.body;
 
     const employee = await EmployeesModel.create({
       name,
       email,
       phoneNumber,
+      joiningDate,
       designation,
       contractLength,
       category,
@@ -119,6 +122,7 @@ const UpdateEmployee = async (req, res) => {
       name,
       email,
       phoneNumber,
+      joiningDate,
       designation,
       contractLength,
       category,
@@ -132,6 +136,7 @@ const UpdateEmployee = async (req, res) => {
           name,
           email,
           phoneNumber,
+          joiningDate,
           designation,
           contractLength,
           category,
@@ -149,7 +154,7 @@ const UpdateEmployee = async (req, res) => {
         message: "Employee not found",
       });
     }
-    return res.json({
+    return res.status(httpStatusCode.OK).json({
       success: true,
       message: "Employee updated successfully",
       employee: employee,
@@ -174,7 +179,7 @@ const deleteEmployee = async (req, res) => {
         message: "Employee not found",
       });
     }
-    return res.json({
+    return res.status(httpStatusCode.OK).json({
       success: true,
       message: "Employee deleted successfully",
     });

@@ -15,6 +15,8 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { Calendar } from "../../components/ui/calendar";
+import { SyncLoader } from "react-spinners";
 // Custom styles for the DataTable
 const customStyles = {
   tableWrapper: {
@@ -72,6 +74,7 @@ const UserList = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [joiningDate, setJoiningDate] = useState("");
   const [designation, setDesignation] = useState("");
   const [contractLength, setContractLength] = useState("");
   const [category, setCategory] = useState("");
@@ -83,15 +86,11 @@ const UserList = () => {
   const [pinCode, setPinCode] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); 
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
-
-
-  const handleViewUser = (user) => {
-    setSelectedUser(user); 
-    setIsUserDetailsModalOpen(!isUserDetailsModalOpen); 
-  };
-
+  const [isEdit, setIsEdit] = useState(false);
+  const [currentEditUser, setCurrentEditUser] = useState("");
+  const [isDateOpen, setIsDateOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
   const columns = [
@@ -144,7 +143,7 @@ const UserList = () => {
             className: "before:hidden left-0.5 border-none",
           }}
           checked={true}
-        // onChange={() => handleToggleStatus(row)}
+          // onChange={() => handleToggleStatus(row)}
         />
       ),
       sortable: false,
@@ -156,9 +155,18 @@ const UserList = () => {
         //   <BsThreeDotsVertical className="text-xl text-[#969DA6]" />
         // </button>
         <div className="flex gap-[10px] items-center">
-          <FaRegEye className="text-xl text-[#10A37F] hover:text-[#10A37F] cursor-pointer" onClick={() => handleViewUser(row)} />
-          <FaEdit className="text-xl text-[#969DA6] hover:text-[#10A37F] cursor-pointer" />
-          <MdDelete className="text-xl text-red-400 hover:text-[#10A37F] cursor-pointer" onClick={() => handleDelete(row?._id)} />
+          <FaRegEye
+            className="text-xl text-[#10A37F] hover:text-[#10A37F] cursor-pointer"
+            onClick={() => handleViewUser(row)}
+          />
+          <FaEdit
+            className="text-xl text-[#969DA6] hover:text-[#10A37F] cursor-pointer"
+            onClick={() => handleEditUserModal(row)}
+          />
+          <MdDelete
+            className="text-xl text-red-400 hover:text-[#10A37F] cursor-pointer"
+            onClick={() => handleDelete(row?._id)}
+          />
         </div>
       ),
       button: true,
@@ -167,6 +175,7 @@ const UserList = () => {
 
   const AddEmployee = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/employees`,
@@ -174,6 +183,7 @@ const UserList = () => {
           name,
           email,
           phoneNumber,
+          joiningDate,
           designation,
           contractLength,
           category,
@@ -191,11 +201,68 @@ const UserList = () => {
         }
       );
       if (response.status === 201) {
+        setLoading(false);
         toast.success("Add Employee Successfully!!");
         handleOpen();
         handleGetUsers();
       }
     } catch (error) {
+      setLoading(false);
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Failed to Add employee");
+    }
+  };
+
+  const UpdateEmployee = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/employees/${currentEditUser}`,
+        {
+          name,
+          email,
+          phoneNumber,
+          joiningDate,
+          designation,
+          contractLength,
+          category,
+          salary,
+          workMode,
+          address,
+          city,
+          state,
+          pinCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setLoading(false);
+        toast.success("Update Employee Data Successfully!!");
+        handleOpen();
+        handleGetUsers();
+        setIsEdit(false);
+        setCurrentEditUser("");
+        setName("");
+        setEmail("");
+        setPhoneNumber("");
+        setJoiningDate("");
+        setDesignation("");
+        setContractLength("");
+        setCategory("");
+        setSalary("");
+        setWorkMode("");
+        setAddress("");
+        setState("");
+        setCity("");
+        setPinCode("");
+      }
+    } catch (error) {
+      setLoading(false);
       console.log(error);
       toast.error(error?.response?.data?.message || "Failed to Add employee");
     }
@@ -239,6 +306,31 @@ const UserList = () => {
       toast.error(error?.response?.data?.message || "Failed to get Users");
     }
   };
+
+  const handleViewUser = (user) => {
+    setSelectedUser(user);
+    setIsUserDetailsModalOpen(!isUserDetailsModalOpen);
+  };
+
+  //handle the edit
+  const handleEditUserModal = (user) => {
+    setIsEdit(true);
+    setCurrentEditUser(user?._id);
+    setName(user?.name);
+    setEmail(user?.email);
+    setPhoneNumber(user?.phoneNumber);
+    setJoiningDate(user?.joiningDate);
+    setDesignation(user?.designation);
+    setContractLength(user?.contractLength);
+    setCategory(user?.category);
+    setSalary(user?.salary);
+    setWorkMode(user?.workMode);
+    setAddress(user?.address);
+    setState(user?.state);
+    setCity(user?.city);
+    setPinCode(user?.pinCode);
+    setOpen(true);
+  };
   useEffect(() => {
     handleGetUsers();
   }, []);
@@ -268,6 +360,7 @@ const UserList = () => {
           customStyles={customStyles}
         />
       </div>
+
       <Dialog
         open={open}
         handler={handleOpen}
@@ -315,6 +408,19 @@ const UserList = () => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 type="text"
+                placeholder="Enter Phone Number"
+                className="border rounded-lg py-2 px-3 focus:outline-none focus:border-[#92613A] placeholder:text-[#747474] text-black"
+              />
+            </div>
+            <div className="flex flex-col gap-y-[5px]">
+              <label htmlFor="joiningDate" className="text-base text-gray-800">
+                Joining Date
+              </label>
+              <input
+                id="joiningDate"
+                value={joiningDate}
+                onChange={(e) => setJoiningDate(e.target.value)}
+                type="date"
                 placeholder="Enter Phone Number"
                 className="border rounded-lg py-2 px-3 focus:outline-none focus:border-[#92613A] placeholder:text-[#747474] text-black"
               />
@@ -432,6 +538,19 @@ const UserList = () => {
               />
             </div>
             <div className="flex flex-col gap-y-[5px]">
+              <label htmlFor="city" className="text-base text-gray-800">
+                city
+              </label>
+              <input
+                id="city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                type="text"
+                placeholder="Enter city"
+                className="border rounded-lg py-2 px-3 focus:outline-none focus:border-[#92613A] placeholder:text-[#747474] text-black"
+              />
+            </div>
+            <div className="flex flex-col gap-y-[5px]">
               <label htmlFor="pinCode" className="text-base text-gray-800">
                 Pin Code
               </label>
@@ -455,13 +574,19 @@ const UserList = () => {
           >
             <span>Cancel</span>
           </Button>
-          <Button
-            variant="gradient"
-            color="#92613A"
-            onClick={(e) => AddEmployee(e)}
-          >
-            <span>Confirm</span>
-          </Button>
+          {loading ? (
+            <Button variant="gradient" color="#92613A">
+              <SyncLoader color="#FCE2CE" />
+            </Button>
+          ) : (
+            <Button
+              variant="gradient"
+              color="#92613A"
+              onClick={(e) => (isEdit ? UpdateEmployee(e) : AddEmployee(e))}
+            >
+              <span>Confirm</span>
+            </Button>
+          )}
         </DialogFooter>
       </Dialog>
 
@@ -471,63 +596,95 @@ const UserList = () => {
         className="max-h-[90vh] overflow-scroll bg-white rounded-lg shadow-xl p-4 md:p-6"
         style={{ scrollbarWidth: "none" }}
       >
-        <DialogHeader className="text-2xl font-semibold text-gray-900">User Details</DialogHeader>
+        <DialogHeader className="text-2xl font-semibold text-gray-900">
+          User Details
+        </DialogHeader>
         <DialogBody>
           {selectedUser ? (
             <div className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-x-4 gap-y-2">
+              <div className="grid md:grid-cols-3 gap-x-4 gap-y-2 ">
                 <div>
                   <h4 className="font-semibold text-lg text-gray-700">Name</h4>
-                  <p className="text-gray-600">{selectedUser.name}</p>
+                  <p className="text-gray-600">{selectedUser?.name}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg text-gray-700">Email</h4>
-                  <p className="text-gray-600">{selectedUser.email}</p>
+                  <p className="text-gray-600">{selectedUser?.email}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Phone Number</h4>
-                  <p className="text-gray-600">{selectedUser.phoneNumber}</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Phone Number
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.phoneNumber}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Designation</h4>
-                  <p className="text-gray-600">{selectedUser.designation}</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Joining Date
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.joiningDate}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Contract Length</h4>
-                  <p className="text-gray-600">{selectedUser.contractLength} Months</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Designation
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.designation}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Category</h4>
-                  <p className="text-gray-600">{selectedUser.category}</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Contract Length
+                  </h4>
+                  <p className="text-gray-600">
+                    {selectedUser?.contractLength} Months
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Salary</h4>
-                  <p className="text-gray-600">{selectedUser.salary} INR</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Category
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.category}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Work Mode</h4>
-                  <p className="text-gray-600">{selectedUser.workMode}</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Salary
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.salary} INR</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Address</h4>
-                  <p className="text-gray-600">{selectedUser.address}</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Work Mode
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.workMode}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700 text-wrap">
+                    Address
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.address}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg text-gray-700">City</h4>
-                  <p className="text-gray-600">{selectedUser.city}</p>
+                  <p className="text-gray-600">{selectedUser?.city}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg text-gray-700">State</h4>
-                  <p className="text-gray-600">{selectedUser.state}</p>
+                  <p className="text-gray-600">{selectedUser?.state}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Pin Code</h4>
-                  <p className="text-gray-600">{selectedUser.pinCode}</p>
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Pin Code
+                  </h4>
+                  <p className="text-gray-600">{selectedUser?.pinCode}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg text-gray-700">Status</h4>
-                  <p className={`text-lg ${selectedUser.status ? 'text-green-600' : 'text-red-600'}`}>
-                    {selectedUser.status ? "Active" : "Inactive"}
+                  <h4 className="font-semibold text-lg text-gray-700">
+                    Status
+                  </h4>
+                  <p
+                    className={`text-lg ${
+                      selectedUser?.status ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {selectedUser?.status ? "Active" : "Inactive"}
                   </p>
                 </div>
               </div>
@@ -546,8 +703,6 @@ const UserList = () => {
           </Button>
         </DialogFooter>
       </Dialog>
-
-
     </div>
   );
 };

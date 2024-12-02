@@ -22,7 +22,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard/*" element={<DashboardLayout />} />
       </Routes>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} containerStyle={{zIndex: 99999}} />
     </div>
   );
 };
