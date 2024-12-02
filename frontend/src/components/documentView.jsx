@@ -138,8 +138,8 @@ const DocumentView = ({ user }) => {
             </View>
             <View style={{ marginTop: 30 }}>
               <Text style={{ textAlign: "justify" }}>
-                This is to certify that {user?.name} worked as an
-                {user?.designation} from {formatDate(user?.joiningDate)} to{" "}
+                This is to certify that {user?.name} worked as an{" "}
+                 {user?.designation} from {formatDate(user?.joiningDate)} to{" "}
                 {calculateEndDate(user?.joiningDate, user?.contractLength)}.
                 During his tenure with us, his contributions to the project
                 funded by the Ministry of Electronics and Information Technology
@@ -239,7 +239,7 @@ const DocumentView = ({ user }) => {
               </View>
               <View style={{ marginTop: 30 }}>
                 <Text style={{ textAlign: "justify" }}>
-                  This is to certify that {user?.name} worked as an
+                  This is to certify that {user?.name} worked as an{" "}
                   {user?.designation} from {formatDate(user?.joiningDate)} to{" "}
                   {calculateEndDate(user?.joiningDate, user?.contractLength)}.
                   During his tenure with us, his contributions to the project
