@@ -28,7 +28,6 @@ const Signup = () => {
           email: email,
           password: password,
           username: username,
-          dob: dob,
         }
       );
       if (response.status === 200) {
@@ -93,24 +92,6 @@ const Signup = () => {
               required
             />
             <HiOutlineEnvelope className="absolute text-2xl bottom-[13px] left-[20px] text-[#757575]" />
-          </div>
-          <div className="flex flex-col w-full relative mb-3">
-            <label
-              htmlFor="dob"
-              className="text-[#616161] font-semibold bg-[#FEF6EF] w-min px-4 relative left-[50px] top-[10px]"
-            >
-              DOB
-            </label>
-            <input
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-              id="name"
-              type="date"
-              className="rounded-3xl  border-[1px] border-[#757575] py-3 w-full bg-transparent focus:outline-none outline-none ps-[50px] text-[#616161] placeholder:text-[#9E9E9E]"
-              placeholder="Enter your Date of Birth"
-              required
-            />
-            <BsCake2 className="absolute text-2xl bottom-[13px] left-[20px] text-[#757575]" />
           </div>
           <div className="flex flex-col w-full relative mb-3">
             <label

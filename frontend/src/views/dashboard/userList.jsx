@@ -83,6 +83,15 @@ const UserList = () => {
   const [pinCode, setPinCode] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null); 
+  const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState(false);
+
+
+  const handleViewUser = (user) => {
+    setSelectedUser(user); 
+    setIsUserDetailsModalOpen(!isUserDetailsModalOpen); 
+  };
+
 
   const handleOpen = () => setOpen(!open);
   const columns = [
@@ -135,7 +144,7 @@ const UserList = () => {
             className: "before:hidden left-0.5 border-none",
           }}
           checked={true}
-          // onChange={() => handleToggleStatus(row)}
+        // onChange={() => handleToggleStatus(row)}
         />
       ),
       sortable: false,
@@ -147,9 +156,9 @@ const UserList = () => {
         //   <BsThreeDotsVertical className="text-xl text-[#969DA6]" />
         // </button>
         <div className="flex gap-[10px] items-center">
-          <FaRegEye className="text-xl text-[#10A37F] hover:text-[#10A37F] cursor-pointer" />
+          <FaRegEye className="text-xl text-[#10A37F] hover:text-[#10A37F] cursor-pointer" onClick={() => handleViewUser(row)} />
           <FaEdit className="text-xl text-[#969DA6] hover:text-[#10A37F] cursor-pointer" />
-          <MdDelete className="text-xl text-red-400 hover:text-[#10A37F] cursor-pointer" onClick={()=>handleDelete(row?._id)} />
+          <MdDelete className="text-xl text-red-400 hover:text-[#10A37F] cursor-pointer" onClick={() => handleDelete(row?._id)} />
         </div>
       ),
       button: true,
@@ -455,6 +464,90 @@ const UserList = () => {
           </Button>
         </DialogFooter>
       </Dialog>
+
+      <Dialog
+        open={isUserDetailsModalOpen}
+        handler={handleViewUser}
+        className="max-h-[90vh] overflow-scroll bg-white rounded-lg shadow-xl p-4 md:p-6"
+        style={{ scrollbarWidth: "none" }}
+      >
+        <DialogHeader className="text-2xl font-semibold text-gray-900">User Details</DialogHeader>
+        <DialogBody>
+          {selectedUser ? (
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-3 gap-x-4 gap-y-2">
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Name</h4>
+                  <p className="text-gray-600">{selectedUser.name}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Email</h4>
+                  <p className="text-gray-600">{selectedUser.email}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Phone Number</h4>
+                  <p className="text-gray-600">{selectedUser.phoneNumber}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Designation</h4>
+                  <p className="text-gray-600">{selectedUser.designation}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Contract Length</h4>
+                  <p className="text-gray-600">{selectedUser.contractLength} Months</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Category</h4>
+                  <p className="text-gray-600">{selectedUser.category}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Salary</h4>
+                  <p className="text-gray-600">{selectedUser.salary} INR</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Work Mode</h4>
+                  <p className="text-gray-600">{selectedUser.workMode}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Address</h4>
+                  <p className="text-gray-600">{selectedUser.address}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">City</h4>
+                  <p className="text-gray-600">{selectedUser.city}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">State</h4>
+                  <p className="text-gray-600">{selectedUser.state}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Pin Code</h4>
+                  <p className="text-gray-600">{selectedUser.pinCode}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700">Status</h4>
+                  <p className={`text-lg ${selectedUser.status ? 'text-green-600' : 'text-red-600'}`}>
+                    {selectedUser.status ? "Active" : "Inactive"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-600">No user selected</p>
+          )}
+        </DialogBody>
+        <DialogFooter className="flex justify-end">
+          <Button
+            color="red"
+            onClick={handleViewUser}
+            className="bg-red-500 text-white hover:bg-red-600"
+          >
+            Close
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+
     </div>
   );
 };
